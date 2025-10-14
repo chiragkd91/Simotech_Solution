@@ -1,0 +1,52 @@
+\r\n# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+\r\n# Diagnostic reports
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+\r\n# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+\r\n# Coverage
+coverage
+*.lcov
+\r\n# Compiled output
+dist
+build
+out
+\r\n# Dependency directories
+node_modules/
+\r\n# Cache
+.cache
+.parcel-cache
+.next
+.nuxt
+.sst
+.docusaurus
+.vite
+vite.config.ts.timestamp-*
+\r\n# Env files
+*.env
+*.env.*
+!.env.example
+\r\n# Editor directories and files
+.idea
+.vscode/*.code-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
+\r\n# OS
+Thumbs.db
+.DS_Store
+\r\n# Misc
+.eslintcache
+.turbo
+\r\n# Local build artifacts
+dist.rar

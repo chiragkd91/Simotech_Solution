@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  /* Sarthi teal */
+  --primary: 166 78% 41%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 212 30% 96%;
+  --secondary-foreground: 222.2 84% 4.9%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 166 78% 41%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 166 78% 41%;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 212 69% 14%;
+  --foreground: 210 40% 98%;
+  --card: 212 69% 16%;
+  --card-foreground: 210 40% 98%;
+  --popover: 212 69% 14%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 166 78% 41%;
+  --primary-foreground: 222.2 84% 4.9%;
+  --secondary: 212 30% 24%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 166 78% 41%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 166 78% 41%;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  color: hsl(var(--foreground));
+  background: hsl(var(--background));
+}
+
+.background {
+  background-color: hsl(var(--background));
+}
+
+.foreground {
+  color: hsl(var(--foreground));
+}
+
+.card {
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+}
+
+.card-foreground {
+  color: hsl(var(--card-foreground));
+}
+
+.popover {
+  background-color: hsl(var(--popover));
+  color: hsl(var(--popover-foreground));
+}
+
+.popover-foreground {
+  color: hsl(var(--popover-foreground));
+}
+
+.primary {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.primary-foreground {
+  color: hsl(var(--primary-foreground));
+}
+
+.secondary {
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+}
+
+.secondary-foreground {
+  color: hsl(var(--secondary-foreground));
+}
+
+.muted {
+  background-color: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+}
+
+.muted-foreground {
+  color: hsl(var(--muted-foreground));
+}
+
+.accent {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+.accent-foreground {
+  color: hsl(var(--accent-foreground));
+}
+
+.destructive {
+  background-color: hsl(var(--destructive));
+  color: hsl(var(--destructive-foreground));
+}
+
+.destructive-foreground {
+  color: hsl(var(--destructive-foreground));
+}
+
+.border {
+  border-color: hsl(var(--border));
+}
+
+.input {
+  border-color: hsl(var(--input));
+}
+
+.ring {
+  --tw-ring-color: hsl(var(--ring));
+}
