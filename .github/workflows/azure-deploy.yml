@@ -46,6 +46,11 @@ jobs:
           name: node-app
           path: .
       
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
+
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
@@ -53,4 +58,4 @@ jobs:
           app-name: 'SimotechSolution'
           slot-name: 'Production'
           package: ./dist
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
+          # Credentials are provided by Azure Login step
