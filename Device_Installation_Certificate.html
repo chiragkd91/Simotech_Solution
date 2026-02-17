@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Device Installation Certificate - Simotech Solution</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --simotech-primary: #0d9488;
+      --simotech-dark: #0f766e;
+      --card-accent: #475569;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --card-bg: #ffffff;
+      --card-bg-alt: #f8fafc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 2rem;
+      font-family: 'Source Sans 3', sans-serif;
+      color: var(--text-dark);
+      background: #e5e7eb;
+      min-height: 100vh;
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .certificate-wrapper { box-shadow: none; }
+      .no-print { display: none !important; }
+      /* Single-column flow so Vendor/Owner/Fitter don't split across pages */
+      .detail-two-col {
+        grid-template-columns: 1fr !important;
+        display: block !important;
+      }
+      .detail-two-col .left-col,
+      .detail-two-col .right-col {
+        display: block !important;
+        margin-bottom: 0.5rem;
+      }
+      .detail-grid {
+        grid-template-columns: 1fr !important;
+      }
+      /* Keep each card on one page - break to next page if needed */
+      .header,
+      .detail-card,
+      .signature-block,
+      .footer {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      /* Fitter Details (and Vendor/Owner) start on new page if not enough space */
+      .detail-card.fitter-details,
+      .detail-card.vendor-details,
+      .detail-card.owner-details {
+        page-break-before: auto;
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
+      .certificate-inner {
+        overflow: visible;
+      }
+    }
+
+    .certificate-wrapper {
+      max-width: 820px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .certificate-inner {
+      padding: 2rem 2.5rem 2.5rem;
+      padding-right: 7rem;
+      padding-bottom: 5rem;
+      position: relative;
+    }
+
+    .header {
+      text-align: center;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo-and-name {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .logo-simotech {
+      flex-shrink: 0;
+    }
+    .logo-simotech svg.logo-img,
+    .logo-simotech img.logo-img {
+      max-height: 56px;
+      width: auto;
+      display: block;
+    }
+
+    .header .company-name {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--simotech-dark);
+      margin: 0;
+      letter-spacing: 0.02em;
+    }
+
+    .tagline {
+      display: block;
+      width: 100%;
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--simotech-dark);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin: 0.25rem 0 0;
+    }
+
+    .certificate-title {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--simotech-dark);
+      margin: 0.75rem 0 0.25rem;
+    }
+
+    .certificate-no {
+      text-align: right;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+    }
+
+    /* Card section: white card, rounded, dark grey left accent */
+    .detail-card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--card-accent);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .detail-card h3 {
+      margin: 0 0 0.75rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Two-column key-value grid (Device & Vehicle) */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem 2rem;
+    }
+
+    .detail-item {
+      display: flex;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    .detail-item .key {
+      font-weight: 700;
+      color: var(--text-dark);
+      min-width: 100px;
+    }
+
+    .detail-item .value {
+      color: var(--text-dark);
+    }
+
+    /* Vendor / Owner / Fitter: Name & Phone left, Email & Address right */
+    .detail-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem 2rem;
+    }
+
+    .detail-two-col .key {
+      font-weight: 700;
+      font-size: 0.875rem;
+      color: var(--text-dark);
+    }
+
+    .detail-two-col .value {
+      font-size: 0.875rem;
+      color: var(--text-dark);
+    }
+
+    .detail-two-col .left-col .value,
+    .detail-two-col .right-col .value {
+      margin-top: 0.15rem;
+    }
+
+    /* Stamp & QR */
+    .qr-area {
+      position: absolute;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      width: 64px;
+      height: 64px;
+    }
+
+    .qr-area img { width: 100%; height: 100%; display: block; }
+
+    .signature-block {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+    .signature-block .sig-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      align-items: end;
+    }
+    .sig-cell { text-align: center; }
+    .sig-line {
+      border-top: 1px solid var(--text-dark);
+      height: 2.5rem;
+      margin-bottom: 0.25rem;
+    }
+    .sig-label { font-size: 0.75rem; color: var(--text-muted); }
+
+    /* Footer: Simotech branding (centered, like trackNOW) */
+    .footer {
+      margin-top: 2rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-dark);
+      line-height: 1.5;
+    }
+
+    .footer .company-name {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .footer a {
+      color: var(--simotech-primary);
+      text-decoration: none;
+    }
+
+    .actions { text-align: center; }
+
+    .toolbar {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .toolbar .btn {
+      padding: 0.35rem 0.75rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .toolbar .btn-icon {
+      padding: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .toolbar .toolbar-icon {
+      width: 22px;
+      height: 22px;
+      display: block;
+    }
+    .btn-new { background: #64748b; color: #fff; }
+    .btn-new:hover { background: #475569; }
+    .btn-edit { background: var(--simotech-primary); color: #fff; }
+    .btn-edit:hover { background: var(--simotech-dark); }
+    .btn-download { background: #0ea5e9; color: #fff; }
+    .btn-download:hover { background: #0284c7; }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: #fff;
+      border-radius: 12px;
+      max-width: 640px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+    .modal-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-header h2 { margin: 0; font-size: 1.15rem; }
+    .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); line-height: 1; }
+    .modal-body { padding: 1.25rem; }
+    .modal-body .form-section { margin-bottom: 1.25rem; }
+    .modal-body .form-section h4 { margin: 0 0 0.5rem; font-size: 0.9rem; color: var(--card-accent); }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 1rem; }
+    .form-grid.full { grid-template-columns: 1fr; }
+    .form-group { display: flex; flex-direction: column; gap: 0.25rem; }
+    .form-group label { font-size: 0.8rem; font-weight: 600; color: var(--text-dark); }
+    .form-group input, .form-group textarea {
+      padding: 0.4rem 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 0.875rem;
+      font-family: inherit;
+    }
+    .form-group textarea { min-height: 48px; resize: vertical; }
+    .modal-footer {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+    }
+    .modal-footer .btn { padding: 0.5rem 1rem; }
+    .btn-cancel { background: #e2e8f0; color: var(--text-dark); }
+    .btn-save { background: var(--simotech-primary); color: #fff; }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+      body { padding: 0.75rem; }
+      .certificate-wrapper { max-width: 100%; border-radius: 8px; }
+      .certificate-inner { padding: 1rem 1.25rem 4rem 1.25rem; padding-right: 4.5rem; }
+      .certificate-title { font-size: 1.25rem; }
+      .detail-grid {
+        grid-template-columns: 1fr;
+        gap: 0.4rem;
+      }
+      .detail-two-col {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+      .detail-item .key { min-width: 110px; }
+      .qr-area {
+        width: 48px;
+        height: 48px;
+        bottom: 1rem;
+        right: 1rem;
+      }
+      .qr-area img { width: 48px; height: 48px; }
+      .footer { font-size: 0.75rem; }
+      .toolbar { gap: 0.35rem; margin-bottom: 0.75rem; }
+      .toolbar .btn-icon { padding: 0.4rem; }
+      .toolbar .toolbar-icon { width: 20px; height: 20px; }
+      .modal { max-width: 100%; margin: 0.5rem; max-height: 85vh; }
+      .modal-body .form-grid { grid-template-columns: 1fr; }
+      .modal-body .form-grid.full { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 0.5rem; }
+      .certificate-inner { padding: 0.75rem 1rem 3.5rem 1rem; padding-right: 4rem; }
+      .detail-card { padding: 0.75rem 1rem; margin-bottom: 1rem; }
+      .detail-card h3 { font-size: 0.9rem; }
+      .detail-item { font-size: 0.8rem; }
+      .detail-two-col .key,
+      .detail-two-col .value { font-size: 0.8rem; }
+      .certificate-no { font-size: 0.75rem; }
+      .footer { font-size: 0.7rem; }
+      .signature-block .sig-row { grid-template-columns: 1fr; gap: 0.75rem; }
+    }
+  </style>
+  <script src="html2pdf.bundle.min.js"></script>
+</head>
+<body>
+  <div class="actions no-print">
+    <div class="toolbar">
+      <button class="btn btn-icon btn-new" onclick="certNew()" title="New Certificate">
+        <svg class="toolbar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><line x1="16" y1="14" x2="16" y2="18"/><line x1="14" y1="16" x2="18" y2="16"/></svg>
+      </button>
+      <button class="btn btn-icon btn-edit" onclick="certEdit()" title="Edit">
+        <svg class="toolbar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 2 2-4L16.5 3.5z"/><path d="M15 5l4 4"/></svg>
+      </button>
+      <button class="btn btn-icon btn-download" onclick="certDownload()" title="Save as PDF">
+        <svg class="toolbar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="certificate-wrapper">
+    <div class="certificate-inner">
+      <div class="header">
+        <div class="logo-and-name">
+          <div class="logo-simotech">
+            <img src="https://raw.githubusercontent.com/chiragkd91/Simotech_Solution/main/public/images/Logo/SimotechLogo.png" alt="Simotech Solution" class="logo-img" />
+          </div>
+          <div class="company-name">Simotech Solution</div>
+        </div>
+        <div class="tagline">All Fleet one Solution</div>
+        <h1 class="certificate-title">Device Installation Certificate</h1>
+      </div>
+
+      <p class="certificate-no">Certificate No.: SIMO-DIC-<span id="certId">8991102506503433695</span></p>
+
+      <!-- Device Details -->
+      <div class="detail-card">
+        <h3>Device Details</h3>
+        <div class="detail-grid">
+          <div class="detail-item"><span class="key">Model:</span><span class="value" id="deviceModel">tnavIC AIS140 4G</span></div>
+          <div class="detail-item"><span class="key">IMEI:</span><span class="value" id="imei">359926590093038</span></div>
+          <div class="detail-item"><span class="key">UID:</span><span class="value" id="uid">250722387618511</span></div>
+          <div class="detail-item"><span class="key">ICCID:</span><span class="value" id="iccid">8991102506503433695</span></div>
+          <div class="detail-item"><span class="key">SIM Activation:</span><span class="value" id="simActivation">29-12-2025</span></div>
+          <div class="detail-item"><span class="key">SIM 1:</span><span class="value" id="sim1">5754227074912</span></div>
+          <div class="detail-item"><span class="key">Expires On:</span><span class="value" id="expiresOn">04-01-2027</span></div>
+          <div class="detail-item"><span class="key">SIM 2:</span><span class="value" id="sim2">5752052856161</span></div>
+        </div>
+      </div>
+
+      <!-- Vehicle Details -->
+      <div class="detail-card">
+        <h3>Vehicle Details</h3>
+        <div class="detail-grid">
+          <div class="detail-item"><span class="key">Reg. No:</span><span class="value" id="regNo">RJ09GC1422</span></div>
+          <div class="detail-item"><span class="key">Registration Date:</span><span class="value" id="regDate">01-10-2014</span></div>
+          <div class="detail-item"><span class="key">Make:</span><span class="value" id="make">Ashok Leyland LTD</span></div>
+          <div class="detail-item"><span class="key">Model:</span><span class="value" id="vehicleModel">A.L.Tractor 4923</span></div>
+          <div class="detail-item"><span class="key">Engine No:</span><span class="value" id="engineNo">EWEZ414409</span></div>
+          <div class="detail-item"><span class="key">RTO Name:</span><span class="value" id="rtoName">Udaipur RTO</span></div>
+          <div class="detail-item"><span class="key">Chassis No:</span><span class="value" id="chassisNo">MB1UPKHB5ERWK3169</span></div>
+          <div class="detail-item"><span class="key">Category:</span><span class="value" id="category">Truck</span></div>
+        </div>
+      </div>
+
+      <!-- Vendor Details -->
+      <div class="detail-card vendor-details">
+        <h3>Vendor Details</h3>
+        <div class="detail-two-col">
+          <div class="left-col">
+            <div class="key">Name:</div>
+            <div class="value" id="vendorName">Super Tech Iot Pvt Ltd NP</div>
+            <div class="key" style="margin-top:0.6rem;">Phone:</div>
+            <div class="value" id="vendorPhone">9999644465</div>
+          </div>
+          <div class="right-col">
+            <div class="key">Email:</div>
+            <div class="value" id="vendorEmail">esupertechnology@gmail.com</div>
+            <div class="key" style="margin-top:0.6rem;">Address:</div>
+            <div class="value" id="vendorAddress">43/9 Najafgarh Road South West Delhi Delhi India 110043, Delhi, Delhi, India</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Owner Details -->
+      <div class="detail-card owner-details">
+        <h3>Owner Details</h3>
+        <div class="detail-two-col">
+          <div class="left-col">
+            <div class="key">Name:</div>
+            <div class="value" id="ownerName">Aman Arora</div>
+            <div class="key" style="margin-top:0.6rem;">Phone:</div>
+            <div class="value" id="ownerPhone">9829723104</div>
+          </div>
+          <div class="right-col">
+            <div class="key">Email:</div>
+            <div class="value" id="ownerEmail">sup@SCM@32@</div>
+            <div class="key" style="margin-top:0.6rem;">Address:</div>
+            <div class="value" id="ownerAddress">23, Sikh Colony, Udaipur Rajasthan-313001</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fitter Details -->
+      <div class="detail-card fitter-details">
+        <h3>Fitter Details</h3>
+        <div class="detail-two-col">
+          <div class="left-col">
+            <div class="key">Company:</div>
+            <div class="value" id="fitterCompany">Super Tech Iot Pvt Ltd NP</div>
+            <div class="key" style="margin-top:0.6rem;">Contact:</div>
+            <div class="value" id="fitterContact">9999644465</div>
+          </div>
+          <div class="right-col">
+            <div class="key">Email:</div>
+            <div class="value" id="fitterEmail">esupertechnology@gmail.com</div>
+            <div class="key" style="margin-top:0.6rem;">Address:</div>
+            <div class="value" id="fitterAddress">43/9 Najafgarh Road South West Delhi Delhi India 110043, Delhi, Delhi, India</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="signature-block">
+        <div class="sig-row">
+          <div class="sig-cell">
+            <div class="sig-line"></div>
+            <div class="sig-label">Authorized Signatory</div>
+            <div class="sig-label" id="signatoryName">Simotech Solution</div>
+          </div>
+          <div class="sig-cell">
+            <div class="sig-line"></div>
+            <div class="sig-label">Date of Issue</div>
+            <div class="sig-label" id="dateOfIssue">—</div>
+          </div>
+          <div class="sig-cell">
+            <div class="sig-line"></div>
+            <div class="sig-label">Customer Acceptance</div>
+            <div class="sig-label" id="customerSignatory">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="qr-area" title="Scan to verify certificate">
+        <img id="qrImg" src="" alt="QR Code" width="64" height="64" />
+      </div>
+
+      <!-- Simotech footer (branding like trackNOW footer) -->
+      <div class="footer">
+        <div class="company-name">Simotech Solution</div>
+        6TH-F, Block-C-614, Bijal Business Center, Aslali Circle Ring Road, Opp. Shyam Icon, Aslali, Ahmedabad, Gujarat 382427<br />
+        +91 98789 11178 | +91 91570 67587 | <a href="https://simotechsolution.com">www.simotechsolution.com</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+
+      function get(id, def) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = params.get(id) || def || el.textContent;
+      }
+
+      var certId = params.get('certId') || params.get('iccid') || '8991102506503433695';
+
+      document.getElementById('certId').textContent = certId;
+
+      get('deviceModel', 'tnavIC AIS140 4G');
+      get('imei', '359926590093038');
+      get('uid', '250722387618511');
+      get('iccid', '8991102506503433695');
+      get('simActivation', '29-12-2025');
+      get('sim1', '5754227074912');
+      get('expiresOn', '04-01-2027');
+      get('sim2', '5752052856161');
+
+      get('regNo', 'RJ09GC1422');
+      get('regDate', '01-10-2014');
+      get('make', 'Ashok Leyland LTD');
+      get('vehicleModel', 'A.L.Tractor 4923');
+      get('engineNo', 'EWEZ414409');
+      get('rtoName', 'Udaipur RTO');
+      get('chassisNo', 'MB1UPKHB5ERWK3169');
+      get('category', 'Truck');
+
+      get('vendorName');
+      get('vendorPhone');
+      get('vendorEmail');
+      get('vendorAddress');
+
+      get('ownerName');
+      get('ownerPhone');
+      get('ownerEmail');
+      get('ownerAddress');
+
+      get('fitterCompany');
+      get('fitterContact');
+      get('fitterEmail');
+      get('fitterAddress');
+
+      var dateEl = document.getElementById('dateOfIssue');
+      if (dateEl && (!dateEl.textContent || dateEl.textContent === '—')) {
+        dateEl.textContent = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-');
+      }
+      get('dateOfIssue');
+      get('signatoryName', 'Simotech Solution');
+      get('customerSignatory');
+
+      document.getElementById('qrImg').src = 'https://api.qrserver.com/v1/create-qr-code/?size=64x64&data=' + encodeURIComponent('SIMO-DIC-' + certId);
+    })();
+
+    window.certNew = function() {
+      if (!confirm('Create new certificate? Current data will be cleared.')) return;
+      var ids = ['deviceModel','imei','uid','iccid','simActivation','sim1','expiresOn','sim2','regNo','regDate','make','vehicleModel','engineNo','rtoName','chassisNo','category','vendorName','vendorPhone','vendorEmail','vendorAddress','ownerName','ownerPhone','ownerEmail','ownerAddress','fitterCompany','fitterContact','fitterEmail','fitterAddress','signatoryName','customerSignatory'];
+      document.getElementById('certId').textContent = Date.now().toString(36).toUpperCase();
+      ids.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = '—';
+      });
+      var dateEl = document.getElementById('dateOfIssue');
+      if (dateEl) dateEl.textContent = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-');
+      document.getElementById('signatoryName').textContent = 'Simotech Solution';
+      updateQR();
+      certEdit();
+    };
+
+    window.certEdit = function() {
+      var fields = ['certId','deviceModel','imei','uid','iccid','simActivation','sim1','expiresOn','sim2','regNo','regDate','make','vehicleModel','engineNo','rtoName','chassisNo','category','vendorName','vendorPhone','vendorEmail','vendorAddress','ownerName','ownerPhone','ownerEmail','ownerAddress','fitterCompany','fitterContact','fitterEmail','fitterAddress','signatoryName','dateOfIssue','customerSignatory'];
+      fields.forEach(function(id) {
+        var el = document.getElementById(id);
+        var inp = document.getElementById('edit_' + id);
+        if (el && inp) inp.value = (el.textContent || '').trim();
+      });
+      document.getElementById('modalEdit').classList.add('open');
+    };
+
+    window.certDownload = function() {
+      if (typeof html2pdf !== 'undefined') {
+        var el = document.querySelector('.certificate-wrapper');
+        var certId = document.getElementById('certId').textContent;
+        var opt = { margin: 10, filename: 'Simotech_Device_Certificate_' + (certId || 'cert') + '.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
+        html2pdf().set(opt).from(el).save();
+      } else {
+        window.print();
+      }
+    };
+
+    function updateQR() {
+      var certId = document.getElementById('certId').textContent;
+      var qr = document.getElementById('qrImg');
+      if (qr) qr.src = 'https://api.qrserver.com/v1/create-qr-code/?size=64x64&data=' + encodeURIComponent('SIMO-DIC-' + certId);
+    }
+
+    function modalSave() {
+      var fields = ['certId','deviceModel','imei','uid','iccid','simActivation','sim1','expiresOn','sim2','regNo','regDate','make','vehicleModel','engineNo','rtoName','chassisNo','category','vendorName','vendorPhone','vendorEmail','vendorAddress','ownerName','ownerPhone','ownerEmail','ownerAddress','fitterCompany','fitterContact','fitterEmail','fitterAddress','signatoryName','dateOfIssue','customerSignatory'];
+      fields.forEach(function(id) {
+        var inp = document.getElementById('edit_' + id);
+        var el = document.getElementById(id);
+        if (inp && el) el.textContent = inp.value.trim() || '—';
+      });
+      document.getElementById('modalEdit').classList.remove('open');
+      updateQR();
+    }
+
+    function modalClose() {
+      document.getElementById('modalEdit').classList.remove('open');
+    }
+  </script>
+
+  <!-- Edit modal -->
+  <div id="modalEdit" class="modal-overlay no-print">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Edit Certificate</h2>
+        <button class="modal-close" onclick="modalClose()" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-section">
+          <h4>Certificate &amp; Device</h4>
+          <div class="form-grid">
+            <div class="form-group"><label>Certificate No. (ICCID)</label><input type="text" id="edit_certId" placeholder="e.g. 8991102506503433695" /></div>
+            <div class="form-group"><label>Device Model</label><input type="text" id="edit_deviceModel" /></div>
+            <div class="form-group"><label>IMEI</label><input type="text" id="edit_imei" /></div>
+            <div class="form-group"><label>UID</label><input type="text" id="edit_uid" /></div>
+            <div class="form-group"><label>ICCID</label><input type="text" id="edit_iccid" /></div>
+            <div class="form-group"><label>SIM Activation</label><input type="text" id="edit_simActivation" placeholder="DD-MM-YYYY" /></div>
+            <div class="form-group"><label>SIM 1</label><input type="text" id="edit_sim1" /></div>
+            <div class="form-group"><label>Expires On</label><input type="text" id="edit_expiresOn" placeholder="DD-MM-YYYY" /></div>
+            <div class="form-group"><label>SIM 2</label><input type="text" id="edit_sim2" /></div>
+          </div>
+        </div>
+        <div class="form-section">
+          <h4>Vehicle</h4>
+          <div class="form-grid">
+            <div class="form-group"><label>Reg. No</label><input type="text" id="edit_regNo" /></div>
+            <div class="form-group"><label>Registration Date</label><input type="text" id="edit_regDate" /></div>
+            <div class="form-group"><label>Make</label><input type="text" id="edit_make" /></div>
+            <div class="form-group"><label>Model</label><input type="text" id="edit_vehicleModel" /></div>
+            <div class="form-group"><label>Engine No</label><input type="text" id="edit_engineNo" /></div>
+            <div class="form-group"><label>RTO Name</label><input type="text" id="edit_rtoName" /></div>
+            <div class="form-group"><label>Chassis No</label><input type="text" id="edit_chassisNo" /></div>
+            <div class="form-group"><label>Category</label><input type="text" id="edit_category" placeholder="e.g. Truck" /></div>
+          </div>
+        </div>
+        <div class="form-section">
+          <h4>Vendor</h4>
+          <div class="form-grid">
+            <div class="form-group"><label>Name</label><input type="text" id="edit_vendorName" /></div>
+            <div class="form-group"><label>Phone</label><input type="text" id="edit_vendorPhone" /></div>
+            <div class="form-group"><label>Email</label><input type="text" id="edit_vendorEmail" /></div>
+            <div class="form-group full"><label>Address</label><textarea id="edit_vendorAddress" rows="2"></textarea></div>
+          </div>
+        </div>
+        <div class="form-section">
+          <h4>Owner</h4>
+          <div class="form-grid">
+            <div class="form-group"><label>Name</label><input type="text" id="edit_ownerName" /></div>
+            <div class="form-group"><label>Phone</label><input type="text" id="edit_ownerPhone" /></div>
+            <div class="form-group"><label>Email</label><input type="text" id="edit_ownerEmail" /></div>
+            <div class="form-group full"><label>Address</label><textarea id="edit_ownerAddress" rows="2"></textarea></div>
+          </div>
+        </div>
+        <div class="form-section">
+          <h4>Fitter</h4>
+          <div class="form-grid">
+            <div class="form-group"><label>Company</label><input type="text" id="edit_fitterCompany" /></div>
+            <div class="form-group"><label>Contact</label><input type="text" id="edit_fitterContact" /></div>
+            <div class="form-group"><label>Email</label><input type="text" id="edit_fitterEmail" /></div>
+            <div class="form-group full"><label>Address</label><textarea id="edit_fitterAddress" rows="2"></textarea></div>
+          </div>
+        </div>
+        <div class="form-section">
+          <h4>Signatures &amp; Date</h4>
+          <div class="form-grid">
+            <div class="form-group"><label>Authorized Signatory (Name)</label><input type="text" id="edit_signatoryName" placeholder="Simotech Solution" /></div>
+            <div class="form-group"><label>Date of Issue</label><input type="text" id="edit_dateOfIssue" placeholder="DD-MM-YYYY" /></div>
+            <div class="form-group full"><label>Customer Acceptance (Name)</label><input type="text" id="edit_customerSignatory" placeholder="Customer signatory name" /></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-cancel" onclick="modalClose()">Cancel</button>
+        <button class="btn btn-save" onclick="modalSave()">Save</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
